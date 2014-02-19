@@ -13,16 +13,41 @@ Particularly interesting are:
 - `ActionSet`: Shows how easy it can be to inherit from `dict`
 """
 from __future__ import print_function
-from functools import wraps
+import inspect  # Used to create our duplicate
+from functools import update_wrapper  # Convenience to update the metadata
+import sys # Used to get rid of py2/3 differences
 
-def copyfunction(func):
-    '''Creates an exact duplicate of the given function
-    This includes the signature and help message'''
-    # We use type(func) because there's no convenient way
-    # to access the function type otherwise
-    return wraps(func)(type(func)(func.__code__, func.__globals__,
-                                  func.__name__, func.__defaults__,
-                                  func.__closure__))
+# Blatantly stolen from the excellent `six` library
+# Allows the same calls between python2 and python3
+if sys.version_info[0] == 3:
+    exec_ = getattr(__builtins__, "exec")
+    raw_input = input
+else:
+    def exec_(_code_, _globs_=None, _locs_=None):
+        """Execute code in a namespace."""
+        if _globs_ is None:
+            frame = sys._getframe(1)
+            _globs_ = frame.f_globals
+            if _locs_ is None:
+                _locs_ = frame.f_locals
+            del frame
+        elif _locs_ is None:
+            _locs_ = _globs_
+        exec("""exec _code_ in _globs_, _locs_""")
+
+
+def wrapper(_func_):
+    '''Create a perfect wrapper (including signature) around a function'''
+    _wrap_ = lambda *_a, **_kw: _func_(*_a, **_kw)
+    src = r'def {0}{1}: return _wrap_{1}'.format(
+        _func_.__name__,
+        inspect.formatargspec(*inspect.getargspec(_func_))
+    )
+    evaldict = {'_wrap_': _wrap_}
+    exec_(src, evaldict)
+    ret = evaldict[_func_.__name__]
+    update_wrapper(ret, _func_)
+    return ret
 
 
 class ActionSet(dict):
@@ -46,20 +71,20 @@ class ActionSet(dict):
         # If they try to decorate without passing any arguments,
         # this allows them to not even need the parenthesis.
         # Works on callables, not just functions
-        # Also (should) handle Python 3 properly
+        # Also handles Python 3 properly
         if hasattr(name, '__call__') and helpmsg is None:
             # Call ourself again with the default parameters, and pretend
             # that the layer of indirection doesn't exist
             return self(None, None)(name)
 
-        def make_action(oldfunc):
+        def make_action(func):
             '''Set up the wrapper
             Adds attributes to a simple wrapper function
             Could modify the wrapper directly, but if other decorators or functions
             use a similar trick it could cause interference'''
 
             # Create the wrapper
-            func = copyfunction(oldfunc)
+            func = wrapper(func)
 
             # Simpler accessor to action name
             func.name = name or func.__name__
