@@ -1,19 +1,41 @@
 #!/usr/bin/env python
+"""
+Action Set class and demonstration
+Matt Soucy
+
+The main purpose of this file is to demonstrate some of the fun things
+that can be done with functions in Python.
+
+Particularly interesting are:
+- `copyfunction`: Duplicates a function perfectly down to the signature
+   that is stored internally and printed with using help()
+- `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
+- `ActionSet`: Shows how easy it can be to inherit from `dict`
+"""
 from __future__ import print_function
+from functools import wraps
 
-# Possible enhancements may include:
-# Deriving from dict (remove need to specify some magic functions)
+def copyfunction(func):
+    '''Creates an exact duplicate of the given function
+    This includes the signature and help message'''
+    # We use type(func) because there's no convenient way
+    # to access the function type otherwise
+    return wraps(func)(type(func)(func.__code__, func.__globals__,
+                                  func.__name__, func.__defaults__,
+                                  func.__closure__))
 
-class ActionSet(object):
+
+class ActionSet(dict):
 
     '''Specifies a set of actions
-    It's possible to have more than one set at a time'''
+    It's possible to have more than one set at a time
+    Derives from dict to allow the user to perform useful actions on it'''
 
     def __init__(self, prefix=None):
         '''Setup
         If a prefix is specified, then it attempts to remove that prefix from
         the names of functions when creating actions'''
-        self._actions = {}
+        dict.__init__(self)
         self._prefix = prefix
 
     def __call__(self, name=None, helpmsg=None):
@@ -30,8 +52,15 @@ class ActionSet(object):
             # that the layer of indirection doesn't exist
             return self(None, None)(name)
 
-        def make_action(func):
-            'Set up the wrapper'
+        def make_action(oldfunc):
+            '''Set up the wrapper
+            Adds attributes to a simple wrapper function
+            Could modify the wrapper directly, but if other decorators or functions
+            use a similar trick it could cause interference'''
+
+            # Create the wrapper
+            func = copyfunction(oldfunc)
+
             # Simpler accessor to action name
             func.name = name or func.__name__
             if self._prefix and func.name.startswith(self._prefix):
@@ -41,31 +70,19 @@ class ActionSet(object):
             func.helpmsg = helpmsg or func.__doc__.split("\n")[0]
 
             # Regiser action into the action set
-            self._actions[func.name] = func
+            self[func.name] = func
             return func
 
         return make_action
-
-    def __getitem__(self, name):
-        'Allow dictionary-like subscripting'
-        return self._actions[name]
-
-    def __iter__(self):
-        'Allow iteration over the available actions'
-        return self._actions.__iter__()
-
-    def __contains__(self, name):
-        'Allow using "in" to detect items'
-        return name in self._actions
 
     def perform(self, msg):
         'Perform an action based on a simplistic CLI-like argument splitting'
         if not msg.strip():
             return
         args = msg.split()
-        command = args.pop(0).lower()
-        if command in self._actions:
-            return self._actions[command](args)
+        command = args.pop(0)
+        if command in self:
+            return self[command](args)
         else:
             raise KeyError('Invalid action "%s"' % command)
 
@@ -107,11 +124,14 @@ def say(args):
 # Testing driver
 if __name__ == '__main__':
     def get_input():
-        try: return raw_input(">> ")
-        except EOFError: return ""
+        try:
+            return raw_input(">> ")
+        except EOFError:
+            return ""
     inp = get_input()
     while inp:
-        try: action.perform(inp)
+        try:
+            action.perform(inp)
         except KeyError as e:
             print("Key error:", e)
         inp = get_input()
