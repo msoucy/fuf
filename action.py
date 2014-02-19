@@ -9,8 +9,14 @@ that can be done with functions in Python.
 Particularly interesting are:
 - `wrapper`: Duplicates a function perfectly down to the signature
    that is stored internally and printed with using help()
+- `wwrapper`: Wrapper wrapper - apply as a decorator to a decorator to produce
+   a decorator that generates perfect-forwarded functions
 - `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
 - `ActionSet`: Shows how easy it can be to inherit from `dict`
+
+Ideas taken from:
+- http://numericalrecipes.wordpress.com/2009/05/25/signature-preserving-function-decorators/
+- http://github.com/msoucy/RepBot
 """
 from __future__ import print_function
 import inspect  # Used to create our duplicate
