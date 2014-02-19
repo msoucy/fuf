@@ -156,6 +156,20 @@ def say(args):
     "Say a message"
     print(" ".join(args))
 
+# Test the "decorator decorator"
+@wwrapper
+def myWrapper(f):
+    def _wrapped(*args, **kwargs):
+        print("Before", args, kwargs)
+        ret = f(*args, **kwargs)
+        print("After")
+        return ret
+    return _wrapped
+
+# Sample usage of the custom wrapper
+@myWrapper
+def myAdd(a, b):
+    return a+b
 
 # Testing driver
 if __name__ == '__main__':
