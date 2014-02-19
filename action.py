@@ -7,7 +7,7 @@ The main purpose of this file is to demonstrate some of the fun things
 that can be done with functions in Python.
 
 Particularly interesting are:
-- `copyfunction`: Duplicates a function perfectly down to the signature
+- `wrapper`: Duplicates a function perfectly down to the signature
    that is stored internally and printed with using help()
 - `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
 - `ActionSet`: Shows how easy it can be to inherit from `dict`
