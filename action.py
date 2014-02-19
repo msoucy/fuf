@@ -36,19 +36,24 @@ else:
         exec("""exec _code_ in _globs_, _locs_""")
 
 
-def wrapper(_func_):
-    '''Create a perfect wrapper (including signature) around a function'''
-    _wrap_ = lambda *_a, **_kw: _func_(*_a, **_kw)
-    src = r'def {0}{1}: return _wrap_{1}'.format(
-        _func_.__name__,
-        inspect.formatargspec(*inspect.getargspec(_func_))
-    )
-    evaldict = {'_wrap_': _wrap_}
-    exec_(src, evaldict)
-    ret = evaldict[_func_.__name__]
-    update_wrapper(ret, _func_)
-    return ret
+def wrapperfor(_wrap_=None):
+    _wrap_ = _wrap_ or (lambda func:(lambda *_a, **_kw: func(*_a, **_kw)))
+    def wrapper(_func_):
+        '''Create a perfect wrapper (including signature) around a function'''
+        # convert bar(f)(*args, **kwargs)
+        # into    f(*args, **kwargs)
+        src = r'def {0}{1}: return _wrap_(func){1}'.format(
+            _func_.__name__,
+            inspect.formatargspec(*inspect.getargspec(_func_))
+        )
+        evaldict = {'_wrap_': _wrap_, 'func': _func_}
+        exec_(src, evaldict)
+        ret = evaldict[_func_.__name__]
+        update_wrapper(ret, _func_)
+        return ret
+    return wrapper
 
+wrapper = wrapperfor()
 
 class ActionSet(dict):
 
