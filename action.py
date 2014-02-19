@@ -56,6 +56,7 @@ def wwrapper(_wrap_):
         exec_(src, evaldict)
         ret = evaldict[_func_.__name__]
         update_wrapper(ret, _func_)
+        ret.__wrapped__ = _func_
         return ret
     return wrapper
 
