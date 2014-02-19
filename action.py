@@ -36,8 +36,8 @@ else:
         exec("""exec _code_ in _globs_, _locs_""")
 
 
-def wrapperfor(_wrap_=None):
-    _wrap_ = _wrap_ or (lambda func:(lambda *_a, **_kw: func(*_a, **_kw)))
+def wwrapper(_wrap_):
+    '''Wrap a decorator with support for the perfect wrapper decorator'''
     def wrapper(_func_):
         '''Create a perfect wrapper (including signature) around a function'''
         # convert bar(f)(*args, **kwargs)
@@ -53,7 +53,7 @@ def wrapperfor(_wrap_=None):
         return ret
     return wrapper
 
-wrapper = wrapperfor()
+wrapper = wwrapper((lambda func:(lambda *_a, **_kw: func(*_a, **_kw))))
 
 class ActionSet(dict):
 
