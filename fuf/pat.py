@@ -16,13 +16,21 @@ class OverloadSet(object):
                 return func(*args, **kwargs)
         raise RuntimeError("No match found for arguments %s %s" % (args, kwargs))
 
+    def reg(self, *cond, **kwcond):
+        def wrap(f):
+            self._overloads.append((cond, kwcond, f))
+            return self
+        return wrap
+
 def Overload(*constraints, **kconstraints):
     def wrap(f):
+        f = getattr(f, "__lastreg__", f)
         name = f.__name__
         mod = sys.modules[f.__module__]
         if not hasattr(mod, name):
             setattr(mod, name, OverloadSet())
-        getattr(mod, name).reg(f, *constraints, **kconstraints)
+        getattr(mod, name).reg(*constraints, **kconstraints)(f)
+        getattr(mod, name).__lastreg__ = f
         return getattr(mod, name)
     return wrap
 
