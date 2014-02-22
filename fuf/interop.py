@@ -3,7 +3,7 @@ import sys # Used to get rid of py2/3 differences
 # Blatantly stolen from the excellent `six` library
 # Allows the same calls between python2 and python3
 if sys.version_info[0] == 3:
-    exec_ = getattr(__builtins__, "exec")
+    exec_ = __builtins__["exec"]
     raw_input = input
 else:
     def exec_(_code_, _globs_=None, _locs_=None):
