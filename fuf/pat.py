@@ -5,19 +5,16 @@ _DoesNotExist_ = object()
 
 class OverloadSet(object):
     def __init__(self):
-        self.members = []
+        self._overloads = []
     def __call__(self, *args, **kwargs):
-        for cond, kcond, func in self.members:
-            print(args)
-            print(cond)
-            print(kcond)
-            if all((len(cond) <= len(args),
+        for cond, kcond, func in self._overloads:
+            if all((
+                    len(cond) <= len(args),
                     all(c(arg) for c, arg in zip(cond, args)),
                     all(kcond.get(name, _)(kwargs.get(name, _DoesNotExist_)) for name in kcond)
                 )):
                 return func(*args, **kwargs)
-    def reg(self, func, *constraints, **kwconstraints):
-        self.members.append((constraints, kwconstraints, func))
+        raise RuntimeError("No match found for arguments %s %s" % (args, kwargs))
 
 def Overload(*constraints, **kconstraints):
     def wrap(f):
