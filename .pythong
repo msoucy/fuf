@@ -1,0 +1,25 @@
+author: Matt Soucy
+bin_dir: /home/msoucy/Code/fuf/bin
+classifiers: []
+description: Funced-Up Functions
+directories: [/home/msoucy/Code/fuf, /home/msoucy/Code/fuf/bin, /home/msoucy/Code/fuf/tests,
+  /home/msoucy/Code/fuf/docs, /home/msoucy/Code/fuf/fuf]
+docs_dir: /home/msoucy/Code/fuf/docs
+email: msoucy@csh.rit.edu
+encoding: utf8
+files: [/home/msoucy/Code/fuf/setup.py, /home/msoucy/Code/fuf/fuf/__init__.py, /home/msoucy/Code/fuf/tests/__init__.py,
+  /home/msoucy/Code/fuf/tests/fuf_tests.py]
+init_file: null
+keywords: ['']
+license: MIT
+name: fuf
+project_dir: /home/msoucy/Code/fuf
+requires: ['']
+setup_file: /home/msoucy/Code/fuf/setup.py
+shortname: fuf
+source_dir: /home/msoucy/Code/fuf/fuf
+test_file: /home/msoucy/Code/fuf/tests/fuf_tests.py
+test_init_file: /home/msoucy/Code/fuf/tests/__init__.py
+tests_dir: /home/msoucy/Code/fuf/tests
+url: http://github.com/msoucy/fuf
+version: 0.1.0
