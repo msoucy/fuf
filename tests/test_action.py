@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from fuf.action import ActionSet
+from fuf import ActionSet
 
 # Create a simple action set
 action = ActionSet()
@@ -35,17 +35,3 @@ def say(args):
     "Say a message"
     print(" ".join(args))
 
-# Testing driver
-if __name__ == '__main__':
-    def get_input():
-        try:
-            return raw_input(">> ")
-        except EOFError:
-            return ""
-    inp = get_input()
-    while inp:
-        try:
-            action.perform(inp)
-        except KeyError as e:
-            print("Key error:", e)
-        inp = get_input()

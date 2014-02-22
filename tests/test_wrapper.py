@@ -1,10 +1,10 @@
 from __future__ import print_function
 
-from fuf.wrapper import wwrapper
+from fuf import wrapper
 
 
 # Test the "decorator decorator"
-@wwrapper
+@wrapper
 def myWrapper(f):
     def _wrapped(*args, **kwargs):
         print("Before", args, kwargs)
@@ -18,3 +18,5 @@ def myWrapper(f):
 def myAdd(a, b):
     return a+b
 
+def test_myAdd():
+    assert myAdd(1,2) == 3
