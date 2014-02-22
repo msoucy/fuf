@@ -29,13 +29,14 @@ def wwrapper(_wrap_):
         '''Create a perfect wrapper (including signature) around a function'''
         # convert bar(f)(*args, **kwargs)
         # into    f(*args, **kwargs)
+        name = _func_.__name__ if _func_.__name__ != "<lambda>" else '_lam'
         src = r'def {0}{1}: return _wrap_(func){1}'.format(
-            _func_.__name__,
+            name,
             inspect.formatargspec(*inspect.getargspec(_func_))
         )
         evaldict = {'_wrap_': _wrap_, 'func': _func_}
         exec_(src, evaldict)
-        ret = evaldict[_func_.__name__]
+        ret = evaldict[name]
         update_wrapper(ret, _func_)
         ret.__wrapped__ = _func_
         return ret
