@@ -1,9 +1,7 @@
 test:
-	workon tester
 	py.test
 
 clean:
-	workon tester
 	pythong --wash
 
 upload:
