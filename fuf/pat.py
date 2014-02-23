@@ -1,4 +1,5 @@
 import sys # For module support
+from inspect import isclass, isroutine
 from .wrapper import wrapper
 
 _DoesNotExist_ = object()
@@ -7,10 +8,20 @@ class OverloadSet(object):
     def __init__(self):
         self._overloads = []
     def __call__(self, *args, **kwargs):
+        def try_condition(c, a):
+            if isclass(c):
+                print("It's a class")
+                return isinstance(a, c)
+            elif isroutine(c):
+                print("It's a function")
+                return c(a)
+            else:
+                print("It's a value")
+                return c == a
         for cond, kcond, func in self._overloads:
             if all((
                     len(cond) <= len(args),
-                    all(c(arg) for c, arg in zip(cond, args)),
+                    all(try_condition(c, arg) for c, arg in zip(cond, args)),
                     all(kcond.get(name, _)(kwargs.get(name, _DoesNotExist_)) for name in kcond)
                 )):
                 return func(*args, **kwargs)

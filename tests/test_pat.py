@@ -27,7 +27,7 @@ def test_sum():
     assert _sum(range(6)) == 15, "Primitive predicate failure"
 
 def test_is():
-    @Overload(Is(int))
+    @Overload(int)
     def isint(x):
         return True
 
