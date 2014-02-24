@@ -1,6 +1,5 @@
 import sys # For module support
 from inspect import isclass, isroutine
-from .wrapper import wrapper
 
 _DoesNotExist_ = object()
 
@@ -45,24 +44,22 @@ def Overload(*constraints, **kconstraints):
         return getattr(mod, name)
     return wrap
 
+
 # Constraints
+# These exist for convenience
 
-@wrapper
 def constraint(func):
-    return lambda arg: func(arg)
+    return lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))
 
-_ = Anything     = constraint(lambda arg: True)
-lt = lambda value: constraint(lambda arg: arg < value)
-le = lambda value: constraint(lambda arg: arg <= value)
-gt = lambda value: constraint(lambda arg: arg > value)
-ge = lambda value: constraint(lambda arg: arg >= value)
-eq = lambda value: constraint(lambda arg: arg == value)
-ne = lambda value: constraint(lambda arg: arg != value)
-between = lambda low, high: constraint(lambda arg: low <= arg < high)
+_   = Anything = lambda arg: True
+Or  = constraint(lambda arg, lpred, rpred: (lpred(arg) or rpred(arg)))
+And = constraint(lambda arg, lpred, rpred: (lpred(arg) and rpred(arg)))
+Not = constraint(lambda arg, pred: not pred(arg))
+Exists =         lambda arg: arg is not _DoesNotExist_
+Between =        lambda low, high: constraint(lambda arg: low <= arg < high)
 
-Or  = lambda lpred, rpred: constraint(lambda arg: (lpred(arg) or rpred(arg)))
-And = lambda lpred, rpred: constraint(lambda arg: (lpred(arg) and rpred(arg)))
-Not = lambda pred: constraint(lambda arg: not pred(arg))
-Is  = lambda t: constraint(lambda arg: isinstance(arg, t))
-
-Exists = constraint(lambda arg: arg is not _DoesNotExist_)
+import operator
+for op in ["lt", "le", "gt", "ge", "eq", "ne"]:
+    globals()[op] = constraint(getattr(operator, op))
+Has = constraint(operator.contains)
+Is  = constraint(operator.is_)
