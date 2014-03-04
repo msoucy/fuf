@@ -24,12 +24,14 @@ class ActionSet(dict):
     It's possible to have more than one set at a time
     Derives from dict to allow the user to perform useful actions on it'''
 
-    def __init__(self, prefix=None):
+    def __init__(self, prefix=None, *env, **kwenv):
         '''Setup
         If a prefix is specified, then it attempts to remove that prefix from
         the names of functions when creating actions'''
         dict.__init__(self)
         self._prefix = prefix
+        self._env = env
+        self._kwenv = kwenv
 
     def __call__(self, name=None, helpmsg=None):
         '''Create the actual wrapper'''
@@ -75,6 +77,7 @@ class ActionSet(dict):
         args = msg.split()
         command = args.pop(0)
         if command in self:
-            return self[command](args)
+            # Send the required environment information
+            return self[command](*(self._env+tuple(args)), **self._kwenv)
         else:
             raise KeyError('Invalid action "%s"' % command)
