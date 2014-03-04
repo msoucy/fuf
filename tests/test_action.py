@@ -50,3 +50,15 @@ def test_basic():
 
     assert action.perform("sub 2 5") == -3, "Basic subtraction failed"
 
+def test_env():
+    data = {}
+    action = ActionSet(None, data)
+
+    @action
+    def add(data, x):
+        return data["x"] + int(x)
+
+    data["x"] = 10
+    assert action.perform("add 5") == 15, "Environment failed"
+    data["x"] = 5
+    assert action.perform("add 5") == 10, "Environment updating failed"
