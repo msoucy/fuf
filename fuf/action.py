@@ -15,7 +15,7 @@ Ideas taken from:
 - http://github.com/msoucy/RepBot
 """
 
-from .wrapper import wrapper
+from .wrapper import fdup
 
 
 class ActionSet(dict):
@@ -52,7 +52,7 @@ class ActionSet(dict):
             use a similar trick it could cause interference'''
 
             # Create the wrapper
-            func = wrapper(func)
+            func = fdup(func)
 
             # Simpler accessor to action name
             func.name = name or func.__name__
@@ -60,7 +60,7 @@ class ActionSet(dict):
                 func.name = func.name.replace(self._prefix, "", 1)
 
             # Simpler accessor to help message
-            func.helpmsg = helpmsg or func.__doc__.split("\n")[0]
+            func.helpmsg = helpmsg or func.__doc__.split("\n")[0] if func.__doc__ else ""
 
             # Regiser action into the action set
             self[func.name] = func
