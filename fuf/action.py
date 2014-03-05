@@ -70,7 +70,7 @@ class ActionSet(dict):
 
         return make_action
 
-    def perform(self, msg):
+    def perform(self, msg, *env, **kwenv):
         'Perform an action based on a simplistic CLI-like argument splitting'
         if not msg.strip():
             return
@@ -78,6 +78,9 @@ class ActionSet(dict):
         command = args.pop(0)
         if command in self:
             # Send the required environment information
-            return self[command](*(self._env+tuple(args)), **self._kwenv)
+            import copy
+            newkwenv = copy.deepcopy(self._kwenv)
+            newkwenv.update(kwenv)
+            return self[command](*(self._env + env + tuple(args)), **newkwenv)
         else:
             raise KeyError('Invalid action "%s"' % command)
