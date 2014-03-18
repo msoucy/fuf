@@ -49,9 +49,10 @@ def Overload(*constraints, **kconstraints):
         mod = sys.modules[f.__module__]
         if not hasattr(mod, name):
             setattr(mod, name, OverloadSet())
-        getattr(mod, name).reg(*constraints, **kconstraints)(f)
-        getattr(mod, name).__lastreg__ = f
-        return getattr(mod, name)
+        newfunc = getattr(mod, name)
+        newfunc.reg(*constraints, **kconstraints)(f)
+        newfunc.__lastreg__ = f
+        return newfunc
     return wrap
 
 
