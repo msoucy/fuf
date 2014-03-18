@@ -27,6 +27,8 @@ class OverloadSet(object):
         raise RuntimeError("No match found for arguments %s %s" % (args, kwargs))
 
     def reg(self, *cond, **kwcond):
+        """ Registration decorator
+        Provides a method to register a function """
         def wrap(f):
             self._overloads.append((cond, kwcond, f))
             return self
@@ -49,6 +51,9 @@ def Overload(*constraints, **kconstraints):
 # These exist for convenience
 
 def constraint(func):
+    """ Create a complex contraint out of a function
+    A variation of partial application, the first argument is the only
+    non-fixed argument. That argument is the one being tested """
     return lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))
 
 _   = Anything = lambda arg: True

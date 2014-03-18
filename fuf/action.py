@@ -7,8 +7,8 @@ The main purpose of this file is to demonstrate some of the fun things
 that can be done with functions in Python.
 
 Particularly interesting are:
-- `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
 - `ActionSet`: Shows how easy it can be to inherit from `dict`
+- `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
 
 Ideas taken from:
 - http://numericalrecipes.wordpress.com/2009/05/25/signature-preserving-function-decorators/
