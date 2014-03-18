@@ -6,15 +6,12 @@ _DoesNotExist_ = object()
 
 def try_condition(c, a):
     """ Perform the correct test depending on the type """
-    if isclass(c):
-        # It's a class
-        return isinstance(a, c)
-    elif isroutine(c):
-        # It's a function
-        return c(a)
-    else:
-        # It's a value, do a regular comparison
-        return c == a
+    # It's a class, so see if the argument has that type
+    if isclass(c): return isinstance(a, c)
+    # It's a function, so treat the return value as a predicate
+    elif isroutine(c): return c(a)
+    # It's a value, do a regular comparison for equality
+    else: return c == a
 
 class OverloadSet(object):
     """ Set of overloaded functions
@@ -60,21 +57,35 @@ def Overload(*constraints, **kconstraints):
 # These exist for convenience
 
 def constraint(func):
-    """ Create a complex contraint out of a function
-    A variation of partial application, the first argument is the only
-    non-fixed argument. That argument is the one being tested """
+    """
+    Create a complex contraint out of a function
+    A variation of partial application
+    The first argument is the only non-fixed argument.
+    That argument is the one being tested.
+    constraint should only be used for predicates that require arguments
+    """
     return lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))
 
+# Any value is valid
 Any = _ =            lambda arg: True
+# Does the argument exist? (Use for keyword arguments)
 Exists  =            lambda arg: arg is not _DoesNotExist_
 Or      = constraint(lambda arg, lpred, rpred: (lpred(arg) or rpred(arg)))
 And     = constraint(lambda arg, lpred, rpred: (lpred(arg) and rpred(arg)))
 Not     = constraint(lambda arg, pred: not pred(arg))
 Between = constraint(lambda arg, low, high: low <= arg < high)
+# One of a set of values
 In      = constraint(lambda arg, *args: arg in args)
 
 import operator
 for op in ["lt", "le", "gt", "ge", "eq", "ne"]:
+    # Basic conditional operators
     globals()[op] = constraint(getattr(operator, op))
 Has = constraint(operator.contains)
 Is  = constraint(operator.is_)
+
+'''
+A few of the rules are solely in place for berevity:
+Between = And(ge(a), lt(b))
+No = Not(Yes)
+'''
