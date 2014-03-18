@@ -8,8 +8,6 @@ Some implementation details taken from Guido van Rossum's article on multimethod
 import sys # For module support
 from inspect import isclass, isroutine
 
-# Special simgleton value, used for testing if an argument exists
-_DoesNotExist_ = object()
 
 def try_pred(pred, arg):
     """ Perform the correct test depending on the type """
@@ -31,11 +29,11 @@ class OverloadSet(object):
         """ Search for the best overload """
 
         for cond, kcond, func in self._overloads:
-            if all((
-                    len(cond) <= len(args),
-                    all(try_condition(c, arg) for c, arg in zip(cond, args)),
-                    all(kcond.get(name, _)(kwargs.get(name, _DoesNotExist_)) for name in kcond)
-                )):
+            if (    len(cond) <= len(args)
+                and all(try_pred(c, arg) for c, arg in zip(cond, args))
+                and all(name in kwargs for name in kcond)
+                and all(kcond[name](kwargs[name]) for name in kcond)
+            ):
                 return func(*args, **kwargs)
         raise RuntimeError("No match found for arguments %s %s" % (args, kwargs))
 
