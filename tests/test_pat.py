@@ -52,7 +52,7 @@ def test_manual():
     assert fact(6) == 720, "Manual registration failed"
 
 def test_exists():
-    @Overload(stuff=Exists)
+    @Overload(stuff=Any)
     def tryit(**kwargs):
         return True
 
