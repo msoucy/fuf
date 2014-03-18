@@ -1,22 +1,30 @@
 import sys # For module support
 from inspect import isclass, isroutine
 
+# Special simgleton value, used for testing if an argument exists
 _DoesNotExist_ = object()
 
+def try_condition(c, a):
+    """ Perform the correct test depending on the type """
+    if isclass(c):
+        # It's a class
+        return isinstance(a, c)
+    elif isroutine(c):
+        # It's a function
+        return c(a)
+    else:
+        # It's a value, do a regular comparison
+        return c == a
+
 class OverloadSet(object):
+    """ Set of overloaded functions
+    Overloads are based on arbitrary constraints """
     def __init__(self):
+        """ Initialize an overload set """
         self._overloads = []
     def __call__(self, *args, **kwargs):
-        def try_condition(c, a):
-            if isclass(c):
-                print("It's a class")
-                return isinstance(a, c)
-            elif isroutine(c):
-                print("It's a function")
-                return c(a)
-            else:
-                print("It's a value")
-                return c == a
+        """ Search for the best overload """
+
         for cond, kcond, func in self._overloads:
             if all((
                     len(cond) <= len(args),
