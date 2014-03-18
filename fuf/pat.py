@@ -62,12 +62,12 @@ def constraint(func):
     A variation of partial application
     The first argument is the only non-fixed argument.
     That argument is the one being tested.
-    constraint should only be used for predicates that require arguments
+    constraint can only be used for predicates that require arguments
     """
     return lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))
 
 # Any value is valid
-Any = _ =            lambda arg: True
+Any     =            lambda arg: True
 # Does the argument exist? (Use for keyword arguments)
 Exists  =            lambda arg: arg is not _DoesNotExist_
 # Truthiness check
