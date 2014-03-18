@@ -64,12 +64,13 @@ def constraint(func):
     non-fixed argument. That argument is the one being tested """
     return lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))
 
-_   = Anything = lambda arg: True
-Or  = constraint(lambda arg, lpred, rpred: (lpred(arg) or rpred(arg)))
-And = constraint(lambda arg, lpred, rpred: (lpred(arg) and rpred(arg)))
-Not = constraint(lambda arg, pred: not pred(arg))
-Exists =         lambda arg: arg is not _DoesNotExist_
-Between =        lambda low, high: constraint(lambda arg: low <= arg < high)
+Any = _ =            lambda arg: True
+Exists  =            lambda arg: arg is not _DoesNotExist_
+Or      = constraint(lambda arg, lpred, rpred: (lpred(arg) or rpred(arg)))
+And     = constraint(lambda arg, lpred, rpred: (lpred(arg) and rpred(arg)))
+Not     = constraint(lambda arg, pred: not pred(arg))
+Between = constraint(lambda arg, low, high: low <= arg < high)
+In      = constraint(lambda arg, *args: arg in args)
 
 import operator
 for op in ["lt", "le", "gt", "ge", "eq", "ne"]:
