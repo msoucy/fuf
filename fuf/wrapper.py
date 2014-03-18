@@ -17,7 +17,7 @@ Ideas taken from:
 """
 import inspect  # Used to create our duplicate
 from functools import update_wrapper  # Convenience to update the metadata
-from .interop import *
+from .interop import exec_
 
 
 def wrapper(_wrap_):
@@ -37,4 +37,7 @@ def wrapper(_wrap_):
         return ret
     return wrapper
 
-fdup = wrapper((lambda func:(lambda *_a, **_kw: func(*_a, **_kw))))
+# The most simple decorator possible, just returns the original function
+identity = lambda func: func
+# Duplicate a function, including internals
+fdup = wrapper(identity)
