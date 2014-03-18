@@ -70,12 +70,23 @@ def constraint(func):
 Any = _ =            lambda arg: True
 # Does the argument exist? (Use for keyword arguments)
 Exists  =            lambda arg: arg is not _DoesNotExist_
-Or      = constraint(lambda arg, lpred, rpred: (lpred(arg) or rpred(arg)))
-And     = constraint(lambda arg, lpred, rpred: (lpred(arg) and rpred(arg)))
-Not     = constraint(lambda arg, pred: not pred(arg))
+# Truthiness check
+Yes     =            lambda arg: arg
+# Falsiness check
+No      =            lambda arg: not arg
+# N-ary or clause for constraints
+Or      = constraint(lambda arg, *preds: any(try_condition(pred, arg) for pred in preds))
+# N-ary and clause for constraints
+And     = constraint(lambda arg, *preds: all(try_condition(pred, arg) for pred in preds))
+# Reverse a constraint
+Not     = constraint(lambda arg, pred: not try_condition(pred, arg))
+# Value within range
 Between = constraint(lambda arg, low, high: low <= arg < high)
 # One of a set of values
 In      = constraint(lambda arg, *args: arg in args)
+# Test the conversion of an argument through a function
+# Behaves like a "cast" operator with a boolean check
+Cast    = constraint(lambda arg, conv: conv(arg))
 
 import operator
 for op in ["lt", "le", "gt", "ge", "eq", "ne"]:
