@@ -8,3 +8,4 @@ from .constraints import (
         lt, le, gt, ge, eq, ne, # Built-in operators
 )
 from .action import ActionSet
+from .dispatchdict import DispatchDict
