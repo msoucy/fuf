@@ -9,3 +9,4 @@ from .constraints import (
 )
 from .action import ActionSet
 from .dispatchdict import DispatchDict
+from .selfcall import mainfunc, SelfInit
