@@ -27,15 +27,11 @@ class DispatchDict(DictMixin):
         self._dict = dict(*args, **kwargs)
 
     def dispatch(self, alias=None):
-        '''
-        Choose a new item to lookup items in
-        '''
+        ''' Choose a new item to lookup items in '''
         self._alias = alias
 
     def get_dispatch(self):
-        '''
-        Get the item being dispatched to
-        '''
+        ''' Get the item being dispatched to '''
         return self._alias
 
     def __getitem__(self, key):
@@ -68,22 +64,16 @@ class DispatchDict(DictMixin):
             raise KeyError(key)
 
     def keys(self):
-        '''
-        List the keys in both dictionaries
-        '''
+        ''' List the keys in the dictionary and dispatch object '''
         return set(self._dict.keys()) | set(self._alias.keys() if self._alias else [])
 
     def __iter__(self):
-        '''
-        Iterates over the builtin dictionary, then the alias
-        '''
+        ''' Iterates over the builtin dictionary, then the dispatch object '''
         if self._alias:
             return chain(self._dict, self._alias)
         else:
             return iter(self._dict)
 
     def __contains__(self, key):
-        '''
-        Test to see if the key exists in either of the dictionaries
-        '''
+        ''' Test to see if the key exists in the dictionary or dispatch object '''
         return key in self._dict or (self._alias and key in self._alias)
