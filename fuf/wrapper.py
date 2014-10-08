@@ -17,7 +17,7 @@ Ideas taken from:
 """
 import inspect  # Used to create our duplicate
 from functools import update_wrapper  # Convenience to update the metadata
-from .interop import exec_
+from six import exec_
 
 
 def wrapper(_wrap_):
