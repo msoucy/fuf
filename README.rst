@@ -1,6 +1,13 @@
 funced-up-functions
 ===================
 
+ .. image:: https://pypip.in/download/fuf/badge.svg
+ .. image:: https://pypip.in/version/fuf/badge.svg
+ .. image:: https://pypip.in/py_versions/fuf/badge.svg
+ .. image:: https://pypip.in/implementation/fuf/badge.svg
+ .. image:: https://pypip.in/format/fuf/badge.svg
+ .. image:: https://pypip.in/license/fuf/badge.svg
+
 Various function-related manipulators
 
 This is meant to be a relatively simple library that adds support for miscellaneous tricks with functions.
