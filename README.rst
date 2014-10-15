@@ -1,6 +1,30 @@
 funced-up-functions
 ===================
 
+.. image:: https://pypip.in/download/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: Downloads
+
+.. image:: https://pypip.in/version/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: Latest Version
+
+.. image:: https://pypip.in/py_versions/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: Supported Python Versions
+
+.. image:: https://pypip.in/implementation/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: Supported Python Implementations
+
+.. image:: https://pypip.in/format/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: Download Format
+
+.. image:: https://pypip.in/license/fuf/badge.svg
+    :target: https://pypi.python.org/pypi/fuf/
+    :alt: License
+
 Various function-related manipulators
 
 This is meant to be a relatively simple library that adds support for miscellaneous tricks with functions.
