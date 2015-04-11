@@ -1,7 +1,8 @@
 from six.moves import range
-import sys # For module support
+import sys  # For module support
 from fuf import *
 # Testing out
+
 
 def test_abs():
 
@@ -15,6 +16,7 @@ def test_abs():
 
     assert _abs(10) == 10, "First overload"
     assert _abs(-10) == 10, "Fell back"
+
 
 def test_sum():
     @Overload(len)
@@ -30,6 +32,7 @@ def test_sum():
 
     assert _sum(range(6)) == 15, "Primitive predicate failure"
 
+
 def test_is():
     @Overload(int)
     def isint(x):
@@ -41,6 +44,7 @@ def test_is():
 
     assert isint(5), "Is predicate failed"
     assert not isint(5.0), "Is predicate failed"
+
 
 def test_manual():
     manual = OverloadSet()
@@ -55,6 +59,7 @@ def test_manual():
 
     assert fact(6) == 720, "Manual registration failed"
 
+
 def test_exists():
     @Overload(stuff=Any)
     def tryit(**kwargs):
@@ -66,6 +71,7 @@ def test_exists():
 
     assert tryit(stuff=""), "Did not detect keyword argument"
     assert not tryit(), "Detected nonexistant keyword argument"
+
 
 def test_complex():
     @Overload(And(gt(5), lt(10)))

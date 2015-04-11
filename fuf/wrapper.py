@@ -13,7 +13,7 @@ Particularly interesting are:
    a decorator that generates perfect-forwarded functions
 
 Ideas taken from:
-- http://numericalrecipes.wordpress.com/2009/05/25/signature-preserving-function-decorators/
+- http://numericalrecipes.wordpress.com/2009/05/25/signature
 """
 import inspect  # Used to create our duplicate
 from functools import update_wrapper  # Convenience to update the metadata
@@ -37,7 +37,10 @@ def wrapper(_wrap_):
         return ret
     return wrapper
 
+
 # The most simple decorator possible, just returns the original function
-identity = lambda func: func
+def identity(func):
+    return func
+
 # Duplicate a function, including internals
 fdup = wrapper(identity)

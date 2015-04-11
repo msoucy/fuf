@@ -13,10 +13,12 @@ def myWrapper(f):
         return ret
     return _wrapped
 
+
 # Sample usage of the custom wrapper
 @myWrapper
 def myAdd(a, b):
     return a+b
 
+
 def test_myAdd():
-    assert myAdd(1,2) == 3
+    assert myAdd(1, 2) == 3

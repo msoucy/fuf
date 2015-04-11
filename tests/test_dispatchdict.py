@@ -1,5 +1,6 @@
 from fuf import DispatchDict
 
+
 def test_basic():
     d1 = {}
     d = DispatchDict()
@@ -11,6 +12,7 @@ def test_basic():
     assert "baz" not in d, "False positive lookup"
     assert d["foo"] == 5, "Value from dispatch"
 
+
 def test_nodispatch():
     d1 = {}
     d = DispatchDict()
@@ -20,4 +22,3 @@ def test_nodispatch():
     assert "bar" in d, "Normal lookup failed"
     assert "baz" not in d, "False positive lookup"
     assert d["bar"] == 7, "Value from dispatch"
-

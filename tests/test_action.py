@@ -2,10 +2,10 @@ from __future__ import print_function
 
 from fuf import ActionSet
 
+
 def test_realworld():
     # Create a simple action set
     action = ActionSet()
-
 
     # Full decorator
     # Nothing is gathered implicitly
@@ -19,14 +19,12 @@ def test_realworld():
         else:
             print("Available commands:", ", ".join(a for a in action))
 
-
     # Partially applied
     # The name is specified, but the help is pulled from the docstring
     @action("verify")
     def action_verify():
         "Confirm access"
         print("Authentication valid")
-
 
     # Implicit
     # The name of the command and the help are pulled from
@@ -49,6 +47,7 @@ def test_basic():
         return float(x)-float(y)
 
     assert action.perform("sub 2 5") == -3, "Basic subtraction failed"
+
 
 def test_env():
     action = ActionSet()

@@ -3,18 +3,19 @@
 Dispatching Dictionary
 Matt Soucy
 
-This class provides a way to forward lookups in a dictionary to a second dictionary
+This class provides a way to forward dictionary lookups to a second dictionary
 transparently, such that users cannot tell which dictionary the item is in.
 
-This is useful in situations where a form of "dictionary inheritance" is needed,
+This is useful in situations where a form of "inheritance" is needed,
 to provide a convenient interface for situations where a core dictionary needs
 to be updated, but other "derived" dictionaries need to look up items from it.
 """
 from itertools import chain
 
+
 class DispatchDict(dict):
     '''
-    Behaves as a dictionary, but provides an option to lookup keys in another dictionary
+    Behaves as a dictionary, but looks up nonexistant keys in another place
     '''
 
     def __init__(self, *args, **kwargs):
@@ -39,9 +40,12 @@ class DispatchDict(dict):
         Get the item with the given key
         Uses the builtin dictionary, or the aliased one if possible
         '''
-        if key in self._dict: return self._dict[key]
-        elif self._alias: return self._alias[key]
-        else: raise KeyError(key)
+        if key in self._dict:
+            return self._dict[key]
+        elif self._alias:
+            return self._alias[key]
+        else:
+            raise KeyError(key)
 
     def __setitem__(self, key, value):
         '''
@@ -65,7 +69,7 @@ class DispatchDict(dict):
 
     def keys(self):
         ''' List the keys in the dictionary and dispatch object '''
-        return set(self._dict.keys()) | set(self._alias.keys() if self._alias else [])
+        return set(self._dict.keys()) | set((self._alias or {}).keys())
 
     def __iter__(self):
         ''' Iterates over the builtin dictionary, then the dispatch object '''
@@ -75,5 +79,5 @@ class DispatchDict(dict):
             return iter(self._dict)
 
     def __contains__(self, key):
-        ''' Test to see if the key exists in the dictionary or dispatch object '''
+        ''' Test to see if the key exists in the dispatch object '''
         return key in self._dict or (self._alias and key in self._alias)

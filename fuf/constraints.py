@@ -107,6 +107,7 @@ def In(arg, *values):
     '''
     return arg in values
 
+
 @constraint
 def Has(arg, value):
     '''
@@ -135,15 +136,15 @@ def Is(arg, value):
     '''
     return arg is value
 
-################################################################################
+###############################################################################
 # Math comparison operators
 
-for op, func in [("lt", lambda x,y: x<y),
-              ("le", lambda x,y: x<=y),
-              ("gt", lambda x,y: x>y),
-              ("ge", lambda x,y: x>=y),
-              ("eq", lambda x,y: x==y),
-              ("ne", lambda x,y: x!=y)]:
+for op, func in [("lt", lambda x, y: x < y),
+                 ("le", lambda x, y: x <= y),
+                 ("gt", lambda x, y: x > y),
+                 ("ge", lambda x, y: x >= y),
+                 ("eq", lambda x, y: x == y),
+                 ("ne", lambda x, y: x != y)]:
     # Basic conditional operators
     func.__doc__ = 'Comparison operator using '+op
     func.__name__ = op

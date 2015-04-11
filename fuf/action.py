@@ -8,10 +8,10 @@ that can be done with functions in Python.
 
 Particularly interesting are:
 - `ActionSet`: Shows how easy it can be to inherit from `dict`
-- `ActionSet().__call__`: uses magic for wrapping a function and hiding metadata
+- `ActionSet().__call__`: wraps a function and hides its metadata
 
 Ideas taken from:
-- http://numericalrecipes.wordpress.com/2009/05/25/signature-preserving-function-decorators/
+- http://numericalrecipes.wordpress.com/2009/05/25/signature
 - http://github.com/msoucy/RepBot
 """
 
@@ -50,8 +50,8 @@ class ActionSet(dict):
         def make_action(func):
             '''Set up the wrapper
             Adds attributes to a simple wrapper function
-            Could modify the wrapper directly, but if other decorators or functions
-            use a similar trick it could cause interference'''
+            Could modify the wrapper directly, but if other decorators or
+            functions use a similar trick it could cause interference'''
 
             # Create the wrapper
             func = fdup(func)
@@ -62,7 +62,9 @@ class ActionSet(dict):
                 func.name = func.name.replace(self._prefix, "", 1)
 
             # Simpler accessor to help message
-            func.helpmsg = helpmsg or func.__doc__.split("\n")[0] if func.__doc__ else ""
+            func.helpmsg = helpmsg or ""
+            if (not func.helpmsg) and func.__doc__:
+                func.helpmsg = func.__doc__.split("\n")[0]
 
             # Regiser action into the action set
             self[func.name] = func
