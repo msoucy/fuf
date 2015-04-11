@@ -5,6 +5,7 @@ Matthew Soucy
 Framework for pattern matching multimethods
 Some implementation details taken from Guido van Rossum's article on multimethods
 '''
+from six.moves import zip
 import sys # For module support
 from inspect import isclass, isroutine
 

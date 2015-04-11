@@ -11,9 +11,8 @@ to provide a convenient interface for situations where a core dictionary needs
 to be updated, but other "derived" dictionaries need to look up items from it.
 """
 from itertools import chain
-from UserDict import DictMixin
 
-class DispatchDict(DictMixin):
+class DispatchDict(dict):
     '''
     Behaves as a dictionary, but provides an option to lookup keys in another dictionary
     '''
@@ -23,6 +22,7 @@ class DispatchDict(DictMixin):
         Construct the internal dictionary like a builtin dictionary
         Specify the `dispatch` keyword argument to provide an alias
         '''
+        super(DispatchDict, self).__init__()
         self._alias = kwargs.pop("dispatch", None)
         self._dict = dict(*args, **kwargs)
 

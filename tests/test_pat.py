@@ -1,3 +1,4 @@
+from six.moves import range
 import sys # For module support
 from fuf import *
 # Testing out
@@ -18,7 +19,10 @@ def test_abs():
 def test_sum():
     @Overload(len)
     def _sum(lst):
-        return lst[0] + _sum(lst[1:])
+        from itertools import islice
+        head = next(islice(lst, 0, 1))
+        tail = list(islice(lst, 1, None))
+        return head + _sum(tail)
 
     @Overload()
     def _sum(lst):
