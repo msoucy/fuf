@@ -35,3 +35,5 @@ Some of the tools include:
 - A slightly-improved version of functools.wraps, which also copies the signature of the function
 - Set of functions that gets dispatched based on the first argument - proof of concept
 - A dictionary class that dispatches to another dictionary if a lookup fails
+
+Supports Python 2 and 3, though improvements, tests, and fixes are more than welcome.
