@@ -25,6 +25,9 @@ funced-up-functions
     :target: https://pypi.python.org/pypi/fuf/
     :alt: License
 
+.. image:: https://travis-ci.org/msoucy/fuf.svg?branch=master
+    :target: https://travis-ci.org/msoucy/fuf
+
 Various function-related manipulators
 
 This is meant to be a relatively simple library that adds support for miscellaneous tricks with functions.
