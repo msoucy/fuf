@@ -35,11 +35,16 @@ class OverloadSet(object):
     def __call__(self, *args, **kwargs):
         """ Search for the best overload """
         for cond, kcond, func in self._overloads:
-            allpred = all(try_pred(c, arg) for c, arg in zip(cond, args))
-            allkw = all(name in kwargs for name in kcond)
-            allkwpred = all(kcond[name](kwargs[name]) for name in kcond)
-            if (len(cond) <= len(args) and allpred and allkw and allkwpred):
-                return func(*args, **kwargs)
+            # Make the checks more clear, at the expense of lines of code
+            if len(cond) > len(args):
+                continue
+            if not all(try_pred(c, arg) for c, arg in zip(cond, args)):
+                continue
+            if not all(name in kwargs for name in kcond):
+                continue
+            if not all(kcond[name](kwargs[name]) for name in kcond):
+                continue
+            return func(*args, **kwargs)
         raise RuntimeError("No match found for arguments %s %s" %
                            (args, kwargs))
 
