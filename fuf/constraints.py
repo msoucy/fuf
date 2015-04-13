@@ -17,8 +17,7 @@ def constraint(func):
     constraint can only be used for predicates that require arguments
     """
     return update_wrapper(
-            (lambda *args, **kwargs: (lambda arg: func(arg, *args, **kwargs))),
-            func)
+        (lambda *a, **kws: (lambda arg: func(arg, *a, **kw))), func)
 
 
 def Any(arg):
@@ -139,13 +138,10 @@ def Is(arg, value):
 ###############################################################################
 # Math comparison operators
 
-for op, func in [("lt", lambda x, y: x < y),
-                 ("le", lambda x, y: x <= y),
-                 ("gt", lambda x, y: x > y),
-                 ("ge", lambda x, y: x >= y),
-                 ("eq", lambda x, y: x == y),
-                 ("ne", lambda x, y: x != y)]:
+for op, func in [("lt", lambda x, y: x < y), ("le", lambda x, y: x <= y),
+                 ("gt", lambda x, y: x > y), ("ge", lambda x, y: x >= y),
+                 ("eq", lambda x, y: x == y), ("ne", lambda x, y: x != y)]:
     # Basic conditional operators
-    func.__doc__ = 'Comparison operator using '+op
+    func.__doc__ = 'Comparison operator using ' + op
     func.__name__ = op
     globals()[op] = constraint(func)

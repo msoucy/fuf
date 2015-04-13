@@ -22,4 +22,5 @@ def SelfInit(*args, **kwargs):
 
     def _wrap(func):
         return func(*args, **kwargs)
+
     return _wrap

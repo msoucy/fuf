@@ -19,7 +19,6 @@ from .wrapper import fdup
 
 
 class ActionSet(dict):
-
     '''Specifies a set of actions
     It's possible to have more than one set at a time
     Derives from dict to allow the user to perform useful actions on it'''

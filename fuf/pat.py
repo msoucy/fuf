@@ -35,10 +35,10 @@ class OverloadSet(object):
     def __call__(self, *args, **kwargs):
         """ Search for the best overload """
         for cond, kcond, func in self._overloads:
-            if (len(cond) <= len(args) and
-                    all(try_pred(c, arg) for c, arg in zip(cond, args)) and
-                    all(name in kwargs for name in kcond) and
-                    all(kcond[name](kwargs[name]) for name in kcond)):
+            allpred = all(try_pred(c, arg) for c, arg in zip(cond, args))
+            allkw = all(name in kwargs for name in kcond)
+            allkwpred = all(kcond[name](kwargs[name]) for name in kcond)
+            if (len(cond) <= len(args) and allpred and allkw and allkwpred):
                 return func(*args, **kwargs)
         raise RuntimeError("No match found for arguments %s %s" %
                            (args, kwargs))
@@ -46,9 +46,11 @@ class OverloadSet(object):
     def reg(self, *cond, **kwcond):
         """ Registration decorator
         Provides a method to register a function """
+
         def wrap(f):
             self._overloads.append((cond, kwcond, f))
             return self
+
         return wrap
 
 
@@ -63,4 +65,5 @@ def Overload(*constraints, **kconstraints):
         newfunc.reg(*constraints, **kconstraints)(f)
         newfunc.__lastreg__ = f
         return newfunc
+
     return wrap

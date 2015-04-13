@@ -16,6 +16,7 @@ def test_main():
 
     def main():
         x.append(5)
+
     main.__module__ = '__main__'
     main = mainfunc(main)
 
@@ -30,6 +31,7 @@ def test_selfinit():
 
         def __call__(self):
             return self.x
+
     assert foo() == 'test', "Self Initialization failed"
 
 
@@ -41,4 +43,5 @@ def test_selfinitconstructor():
 
         def __call__(self):
             return self.x
+
     assert foo() == 'test', "Self Initialization with argument failed"

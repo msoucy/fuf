@@ -40,11 +40,11 @@ def test_basic():
 
     @action
     def add(x, y):
-        return float(x)+float(y)
+        return float(x) + float(y)
 
     @action
     def sub(x, y):
-        return float(x)-float(y)
+        return float(x) - float(y)
 
     assert action.perform("sub 2 5") == -3, "Basic subtraction failed"
 

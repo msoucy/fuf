@@ -1,12 +1,18 @@
+# Basic libraries
 from .wrapper import wrapper, identity, fdup
 from .pat import OverloadSet, Overload
-from .constraints import (
-        Any, Exists, Yes, No,    # Parameter-less existence
-        Or, And, Not,            # Logic modifiers
-        Between, In, Cast,       # Complex convenience constraints
-        Has, Is,                 # Membership constraints
-        lt, le, gt, ge, eq, ne,  # Built-in operators
-)
 from .action import ActionSet
 from .dispatchdict import DispatchDict
 from .selfcall import mainfunc, SelfInit
+
+# Constraints
+# Parameter-less existence
+from .constraints import Any, Exists, Yes, No
+# Logic modifiers
+from .constraints import Or, And, Not
+# Complex convenience constraints
+from .constraints import Between, In, Cast
+# Membership constraints
+from .constraints import Has, Is
+# Built-in operators
+from .constraints import lt, le, gt, ge, eq, ne

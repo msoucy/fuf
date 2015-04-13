@@ -11,13 +11,14 @@ def myWrapper(f):
         ret = f(*args, **kwargs)
         print("After")
         return ret
+
     return _wrapped
 
 
 # Sample usage of the custom wrapper
 @myWrapper
 def myAdd(a, b):
-    return a+b
+    return a + b
 
 
 def test_myAdd():

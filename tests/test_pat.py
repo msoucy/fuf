@@ -1,11 +1,11 @@
 from six.moves import range
 import sys  # For module support
 from fuf import *
+
 # Testing out
 
 
 def test_abs():
-
     @Overload(ge(0))
     def _abs(x):
         return x
@@ -55,7 +55,7 @@ def test_manual():
 
     @manual.reg()
     def fact(x):
-        return x * fact(x-1)
+        return x * fact(x - 1)
 
     assert fact(6) == 720, "Manual registration failed"
 
