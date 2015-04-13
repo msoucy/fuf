@@ -17,7 +17,7 @@ def constraint(func):
     constraint can only be used for predicates that require arguments
     """
     return update_wrapper(
-        (lambda *a, **kws: (lambda arg: func(arg, *a, **kw))), func)
+        (lambda *a, **kws: (lambda arg: func(arg, *a, **kws))), func)
 
 
 def Any(arg):
